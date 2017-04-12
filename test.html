@@ -100,18 +100,24 @@
 	{
 		const board = new Board(100, 100, "board", startingTilesDummyData);
 	}
-	
+
 	</script>
 	<style type="text/css">
 	*{	
 		margin: 0px;
 		border-spacing: 0px;
 	}
-	td
+	#board
+	{
+		margin: 0 auto;
+		border: 2px solid #000;
+	}
+	#board td
 	{
 		min-width: 10px;
 		height: 10px;
-		border: 1px solid #000;
+		border-bottom: 1px solid #000;
+		border-right: 1px solid #000;
 	}
 	</style>
 </head>
