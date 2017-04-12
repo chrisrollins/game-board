@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>test</title>
+	<script type="text/javascript">
+
+//this class is incomplete
+	class Board
+	{
+		constructor(height, width, tableID)
+		{
+			this.board = document.getElementById(tableID);
+			this.ownership = new Array(100);
+			for(let i = 0; i < ownership.length; i++)
+			{
+				ownership[i] = new Array(100);
+			}
+			for(let i = 0; i < 100; i++)
+			{
+				const row = document.createElement("tr");
+				board.appendChild(row);
+				for(let j = 0; j < 100; j++)
+				{
+					const td = document.createElement("td");
+					td.id = `${i}-${j}`;
+					td.onmouseup = function(e){
+						td.style["background-color"] = "#000";
+						console.log(e.target.id);
+						console.log(parseId(e.target.id));
+					}
+					row.appendChild(td);
+				}
+			}
+		}
+
+
+	}
+
+	const ownership = new Array(100);
+	for(let i = 0; i < ownership.length; i++)
+	{
+		ownership[i] = new Array(100);
+	}
+
+	const parseId = function(id)
+	{
+		let arr = id.split("-");
+		let x = parseInt(arr[0]);
+		let y = parseInt(arr[1]);
+		return {x: x, y: y};
+	}
+
+	window.onload = function()
+	{
+		const board = document.querySelector("#board");
+		for(let i = 0; i < 100; i++)
+		{
+			const row = document.createElement("tr");
+			board.appendChild(row);
+			for(let j = 0; j < 100; j++)
+			{
+				const td = document.createElement("td");
+				td.id = `${i}-${j}`;
+				td.onmouseup = function(e){
+					td.style["background-color"] = "#000";
+					console.log(e.target.id);
+					console.log(parseId(e.target.id));
+				}
+				row.appendChild(td);
+			}
+		}
+	}
+	</script>
+	<style type="text/css">
+	*{	
+		margin: 0px;
+		border-spacing: 0px;
+	}
+	td
+	{
+		min-width: 10px;
+		height: 10px;
+		border: 1px solid #000;
+	}
+	</style>
+</head>
+<body>
+<table id="board">
+
+</table>
+</body>
+</html>
