@@ -8,22 +8,20 @@
 		{x: 0, y: 0, color: "#00ff00"},
 		{x: 50, y: 23, color: "#ff0000"}
 	];
-
 	const localPlayerID = 1;
 
-//this class is incomplete
 	class Board
 	{
 		constructor(height, width, tableID, players)
 		{
 			this.sounds = {
-				success: new Audio("http://soundbible.com/grab.php?id=2154&type=mp3"),
-				fail: new Audio("http://soundbible.com/grab.php?id=2017&type=mp3")
+				success: "http://soundbible.com/grab.php?id=2154&type=mp3",
+				fail: "http://soundbible.com/grab.php?id=2017&type=mp3"
 			};
 			this.board = document.getElementById(tableID);
 			this.ownership = new Array(100);
 			this.players = players;
-			for(let i = 0; i < ownership.length; i++)
+			for(let i = 0; i < this.ownership.length; i++)
 			{
 				this.ownership[i] = new Array(100);
 			}
@@ -76,15 +74,13 @@
 		{
 			if(this.validateConquer(x, y, playerID) || skipValidation)
 			{
-				this.sounds.success = new Audio("http://soundbible.com/grab.php?id=2154&type=mp3");
-				this.sounds.success.play();
+				new Audio(this.sounds.success).play();
 				this.ownership[x][y] = playerID;
 				document.getElementById(`${x}-${y}`).style["background-color"] = this.players[playerID].color;
 			}
 			else
 			{
-				this.sounds.fail = new Audio("http://soundbible.com/grab.php?id=2017&type=mp3");
-				this.sounds.fail.play();
+				new Audio(this.sounds.fail).play();
 			}
 		}
 
@@ -100,42 +96,11 @@
 
 	}
 
-	const ownership = new Array(100);
-	for(let i = 0; i < ownership.length; i++)
-	{
-		ownership[i] = new Array(100);
-	}
-
-	// const parseId = function(id)
-	// {
-	// 	let arr = id.split("-");
-	// 	let x = parseInt(arr[0]);
-	// 	let y = parseInt(arr[1]);
-	// 	return {x: x, y: y};
-	// }
-
 	window.onload = function()
 	{
-		// const board = document.querySelector("#board");
-		// for(let i = 0; i < 100; i++)
-		// {
-		// 	const row = document.createElement("tr");
-		// 	board.appendChild(row);
-		// 	for(let j = 0; j < 100; j++)
-		// 	{
-		// 		const td = document.createElement("td");
-		// 		td.id = `${i}-${j}`;
-		// 		td.onmouseup = function(e){
-		// 			td.style["background-color"] = "#000";
-		// 			console.log(e.target.id);
-		// 			console.log(parseId(e.target.id));
-		// 		}
-		// 		row.appendChild(td);
-		// 	}
-		// }
-
 		const board = new Board(100, 100, "board", startingTilesDummyData);
 	}
+	
 	</script>
 	<style type="text/css">
 	*{	
