@@ -14,9 +14,22 @@
 	{
 		constructor(height, width, tableID, players)
 		{
+			const sound = function(url)
+			{
+				const soundObj = new Audio(url);
+				return {
+					play: function()
+					{
+						soundObj.currentTime = 0;
+						soundObj.play();
+					},
+					audioObject: soundObj
+				}
+			};
+
 			this.sounds = {
-				success: "http://soundbible.com/grab.php?id=2154&type=mp3",
-				fail: "http://soundbible.com/grab.php?id=2017&type=mp3"
+				success: sound("http://soundbible.com/grab.php?id=2154&type=mp3"),
+				fail: sound("http://soundbible.com/grab.php?id=2017&type=mp3")
 			};
 			this.board = document.getElementById(tableID);
 			this.ownership = new Array(100);
@@ -74,13 +87,13 @@
 		{
 			if(this.validateConquer(x, y, playerID) || skipValidation)
 			{
-				new Audio(this.sounds.success).play();
+				this.sounds.success.play();
 				this.ownership[x][y] = playerID;
 				document.getElementById(`${x}-${y}`).style["background-color"] = this.players[playerID].color;
 			}
 			else
 			{
-				new Audio(this.sounds.fail).play();
+				this.sounds.fail.play();
 			}
 		}
 
