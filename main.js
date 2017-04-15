@@ -177,7 +177,7 @@ class Board
 						window.onmouseup = function()
 						{
 							holdingMouse = false;
-							document.body.onmouseup = undefined;
+							window.onmouseup = undefined;
 						}
 					}
 				}
@@ -185,7 +185,7 @@ class Board
 					if(holdingMouse === true)
 					{
 						const spot = parseId(lastSpot.id);
-						self.setOwnership(spot.x, spot.y, localPlayerID);
+						self.setOwnership(spot.x, spot.y, localPlayerID, {success: self.sounds.success});
 						lastSpot = td;
 					}
 				}
@@ -195,7 +195,7 @@ class Board
 
 		for(let i = 0; i<players.length; i++)
 		{
-			this.setOwnership(players[i].start.x, players[i].start.y, i, true, false);
+			this.setOwnership(players[i].start.x, players[i].start.y, i, {}, true);
 		}
 	}
 	///End constructor///
@@ -212,18 +212,18 @@ class Board
 		return false;
 	}
 
-	setOwnership(x, y, playerID, skipValidation = false, playSounds = true)
+	setOwnership(x, y, playerID, sounds = {success: this.sounds.success, fail: this.sounds.fail}, skipValidation = false)
 	{
 		if(this.validateConquer(x, y, playerID) || skipValidation)
 		{
-			if(playSounds){
-				this.sounds.success.play();
+			if(sounds.success){
+				sounds.success.play();
 			}
 			this.ownership[x][y] = playerID;
 			document.getElementById(`${x}-${y}`).style["background-color"] = this.players[playerID].color;
 		}
-		else if(playSounds){
-			this.sounds.fail.play();
+		else if(sounds.fail){
+			sounds.fail.play();
 		}
 	}
 
