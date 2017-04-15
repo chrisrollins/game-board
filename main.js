@@ -2,7 +2,7 @@ const modalMessage = {
 
 	show: function(title, message, buttonGenerator)
 	{
-		const closure = arguments.callee;
+		const closure = arguments.callee; //This isnt a real closure. It's a similar pattern I'm trying out.
 		if(!closure.elements)
 		{
 			const box = document.createElement("div");
