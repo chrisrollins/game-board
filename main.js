@@ -1,6 +1,6 @@
 const modalMessage = {
 
-	show: function(title, message, buttonGenerator)
+	show: function(title, message, additionalElementGeneratorCallback)
 	{
 		const closure = arguments.callee; //This isnt a real closure. It's a similar pattern I'm trying out.
 		if(!closure.elements)
@@ -12,9 +12,9 @@ const modalMessage = {
 			const buttons = document.createElement("div");
 			closure.elements = {box: box, text: text, titleBar: titleBar, buttons: buttons};
 
+			flex.appendChild(text);
 			box.appendChild(titleBar);
 			box.appendChild(flex);
-			flex.appendChild(text);
 			box.appendChild(buttons);
 
 			box.style["background-color"] = "#fff";
@@ -52,13 +52,13 @@ const modalMessage = {
 		const buttons = closure.elements.buttons;
 		buttons.innerHTML = "";
 		document.querySelector("#board").style.filter = "blur(2px)";
-		do
+		while(true)
 		{
-			var button = buttonGenerator();
-			if(button)
-				buttons.appendChild(button);
+			const button = additionalElementGeneratorCallback();
+			if(!button)
+				break;
+			buttons.appendChild(button); 
 		}
-		while(button);
 
 		text.innerText = message;
 		titleBar.innerText = title;
@@ -94,7 +94,6 @@ const randomStartPosition = function(boardWidth, boardHeight)
 	if(!closure.remainingPositions)
 	{
 		closure.remainingPositions = new Array(totalPositions);
-		console.log(totalPositions);
 		for(let i = 0; i < totalPositions; i++)
 		{
 			let offset = ~~(divisor/2);
@@ -112,9 +111,10 @@ const rsp = randomStartPosition;
 
 const startingTilesDummyData = [
 	{start: rsp(100, 100).position, color: "#00ff00"},
-	{start: rsp(100, 100).position, color: "#ff0000"}
+	{start: rsp(100, 100).position, color: "#ff0000"},
+	{start: rsp(100, 100).position, color: "#0000ff"}
 ];
-let localPlayerID = 1;
+let localPlayerID = -1;
 
 class Board
 {
@@ -249,8 +249,11 @@ const playerPickButton = function()
 		{
 			localPlayerID = eventNum;
 			modalMessage.dismiss();
-			//when this function is initialized it gets closure on the value of eventNum
-			//which does not change when buttonNum changes.
+			/*
+			when this function is initialized it gets closure on the value of eventNum
+			which does not change when buttonNum changes.
+			const is block scoped like let, so each event one gets a different copy of eventNum.
+			*/
 		};
 		button.style["background-color"] = startingTilesDummyData[buttonNum].color;
 		button.style.color = "#fff";
