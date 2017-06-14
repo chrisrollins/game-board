@@ -153,6 +153,38 @@ class Board
 		{
 			this.ownership[i] = new Array(100);
 		}
+		let holdingMouse = false;
+		let lastSpot;
+		const thisRef = this;
+		this.board.onmouseup = function(e){
+			const td = e.srcElement;
+			const spot = parseId(td.id);
+			thisRef.setOwnership(spot.x, spot.y, localPlayerID);
+		}
+		this.board.onmousedown = function(e){
+			const td = e.srcElement;
+			const spot = parseId(td.id);
+			if(thisRef.validateConquer(spot.x, spot.y, localPlayerID))
+			{
+				holdingMouse = true;
+				lastSpot = td;
+				window.onmouseup = function()
+				{
+					holdingMouse = false;
+					window.onmouseup = undefined;
+				}
+			}
+		}
+		this.board.onmouseover = function(e){
+			const td = e.srcElement;
+			if(holdingMouse === true)
+			{
+				const spot = parseId(lastSpot.id);
+				thisRef.setOwnership(spot.x, spot.y, localPlayerID, {success: thisRef.sounds.success});
+				lastSpot = td;
+			}
+		}
+
 		for(let i = 0; i < 100; i++)
 		{
 			const row = document.createElement("tr");
@@ -161,34 +193,6 @@ class Board
 			{
 				const td = document.createElement("td");
 				td.id = `${j}-${i}`;
-				const self = this;
-				var holdingMouse = false; //need to use var for these to make all the events get closure on the same ones
-				var lastSpot;
-				td.onmouseup = function(e){
-					const spot = parseId(td.id);
-					self.setOwnership(spot.x, spot.y, localPlayerID);
-				}
-				td.onmousedown = function(e){
-					const spot = parseId(td.id);
-					if(self.validateConquer(spot.x, spot.y, localPlayerID))
-					{
-						holdingMouse = true;
-						lastSpot = td;
-						window.onmouseup = function()
-						{
-							holdingMouse = false;
-							window.onmouseup = undefined;
-						}
-					}
-				}
-				td.onmouseover = function(e){
-					if(holdingMouse === true)
-					{
-						const spot = parseId(lastSpot.id);
-						self.setOwnership(spot.x, spot.y, localPlayerID, {success: self.sounds.success});
-						lastSpot = td;
-					}
-				}
 				row.appendChild(td);
 			}
 		}
